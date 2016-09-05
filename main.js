@@ -1,14 +1,6 @@
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
 
-/**
- * Don't hard-code your credentials!
- * Export the following environment variables instead:
- *
- * export AWS_ACCESS_KEY_ID='AKID'
- * export AWS_SECRET_ACCESS_KEY='SECRET'
- */
-
 // Set your region for future requests.
 AWS.config.region = 'eu-west-1';
 

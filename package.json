@@ -1,0 +1,33 @@
+{
+  "name": "s3sync",
+  "version": "1.0.0",
+  "description": "A simple folder syncing application for S3",
+  "main": "main.js",
+  "scripts": {
+    "test": "test",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/Xaeonn/s3sync.git"
+  },
+  "keywords": [
+    "sync",
+    "s3",
+    "backup"
+  ],
+  "author": "Sam Boles",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-react": "^6.11.1",
+    "electron-prebuilt": "^1.2.0",
+    "aws-sdk":"^2.5.5"
+  },
+  "dependencies": {
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "aws-sdk":"^2.5.5"
+  }
+}

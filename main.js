@@ -1,18 +1,36 @@
-// Load the AWS SDK for Node.js
-var AWS = require('aws-sdk');
+const electron = require('electron')
 
-// Set your region for future requests.
-AWS.config.region = 'eu-west-1';
+const app = electron.app
+const BrowserWindow = electron.BrowserWindow
+let mainWindow
 
-var s3 = new AWS.S3();
+function createWindow () {
+  mainWindow = new BrowserWindow({width: 800, height: 600, frame:false})
+  mainWindow.loadURL(`file://${__dirname}/app/page.html`)
 
-s3.listBuckets(function(err, data) {
-  if (err) { console.log("Error:", err); }
-  else {
-    // console.log("Got something: ", data)
-    for (var index in data.Buckets) {
-      var bucket = data.Buckets[index];
-      console.log("Bucket: ", bucket.Name, ' : ', bucket.CreationDate);
-    }
+  mainWindow.on('closed', function () {
+    mainWindow = null
+  })
+}
+
+app.on('ready', createWindow)
+
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') {
+    app.quit()
   }
-});
+})
+
+app.on('activate', function () {
+  if (mainWindow === null) {
+    createWindow()
+  }
+})
+
+app.on('will-quit', () => {
+  const {app, globalShortcut} = require('electron')
+  globalShortcut.unregisterAll()
+})
+
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and require them here.

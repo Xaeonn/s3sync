@@ -1,0 +1,1 @@
+babel --presets react app/react-components/ --out-dir app/compiled-react/

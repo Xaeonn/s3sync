@@ -1,0 +1,38 @@
+#titleBar{
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.windowControl{
+  position: relative;
+  text-align: center;
+  display:inline-block;
+  font-size: 0.5em;
+  width:15px;
+  height:5px;
+  top: 15px;
+  vertical-align: middle;
+  line-height: 5px;
+}
+
+.windowControl:hover{
+    height:15px;
+    top: 15px;
+    line-height: 15px;
+    border-radius: 100%;
+}
+
+#closeButton{
+  background: #f00;
+}
+#minButton{
+  background: #ff0;
+}
+#maxButton{
+  background: #0f0;
+  margin-right: 10px;
+}
+
+.no-drag{
+  -webkit-app-region: no-drag;
+}

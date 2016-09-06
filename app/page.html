@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>S3Sync</title>
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="nav.css">
+    <link rel="stylesheet" href="static/css/nav.css">
   </head>
   <body>
     <div id="container"></div>
@@ -12,7 +12,7 @@
 
   <script>
     // S3 client
-    var S3Client = require('./s3cli');
+    var S3Client = require('./aws/s3client/s3cli');
     s3Client = new S3Client('eu-west-1');
     // React base component
     PageManager = require('./compiled-react/PageManager');

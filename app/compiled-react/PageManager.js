@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 // Components
 Page = require('./Page');
 BucketList = require('./BucketList');
+FolderView = require('./FolderView');
 
 // Constants
 const links = [{ pageId: "buckets", text: "Buckets" }, { pageId: "sync_folders", text: "Syncing Folders" }, { pageId: "static_sites", text: "Static Websites" }, { pageId: "domains", text: "Domains" }, { pageId: "blogs", text: "Blogs" }, { pageId: "galeries", text: "Galeries" }];
@@ -18,8 +19,8 @@ PageManager = function () {
 PageManager.prototype.render = function () {
   ReactDOM.render(React.createElement(
     Page,
-    { links: this.NavLinks, loadPage: this.loadPage },
-    React.createElement(BucketList, { buckets: s3Client.buckets, loadPage: this.loadPage })
+    { links: this.NavLinks, pageHandler: this },
+    React.createElement(BucketList, { buckets: s3Client.buckets, pageHandler: this })
   ), document.getElementById('container'));
 };
 
@@ -44,11 +45,23 @@ PageManager.prototype.loadPage = function (pageId, data) {
       console.log("galeries");
       break;
     case "bucket":
-      console.log("Loading bucket ", data);
+      this.loadBucket(data);
       break;
     default:
       console.log("Sorry, we are out of " + pageId + ".");
   }
+};
+
+PageManager.prototype.loadBucket = function (data) {
+  folder = data;
+  pm = this;
+  s3Client.getObjectList(data, function (items) {
+    ReactDOM.render(React.createElement(
+      Page,
+      { links: pm.NavLinks, loadPage: pm.loadPage },
+      React.createElement(FolderView, { folderItems: items, folderName: folder, pageHandler: pm })
+    ), document.getElementById('container'));
+  });
 };
 
 module.exports = PageManager;

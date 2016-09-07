@@ -2,16 +2,16 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 FolderView = React.createClass({
-  populateList: function(bucket){
-    return <li key={bucket} className="list-group-item">
-        <a href="#" onClick={()=>this.props.loadPage('bucket',bucket)}>
-          {bucket}
+  populateList: function(item){
+    return <li key={item.name} className="list-group-item">
+        <a href="#" onClick={()=>this.props.pageHandler.loadPage('bucket',item.name)}>
+          {item.name}
         </a>
       </li>;
   },
   render: function() {
     return <div className="container-fluid"><h2>{this.props.folderName}</h2><ul className="list-group">
-      {this.props.buckets.map(this.populateList)}
+      {this.props.folderItems.map(this.populateList)}
     </ul></div>;
   }
 });

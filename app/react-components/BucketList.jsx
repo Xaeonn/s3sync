@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 BucketList = React.createClass({
   populateList: function(bucket){
     return <li key={bucket} className="list-group-item">
-        <a href="#" onClick={()=>this.props.loadPage('bucket',bucket)}>
+        <a href="#" onClick={()=>this.props.pageHandler.loadPage('bucket',bucket)}>
           {bucket}
         </a>
       </li>;

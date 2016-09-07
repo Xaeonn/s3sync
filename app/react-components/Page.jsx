@@ -5,7 +5,7 @@ require('./NavBar');
 var Page = React.createClass({
   render: function() {
     return <div>
-      <NavBar links={this.props.links} loadPage={this.props.loadPage}/>
+      <NavBar links={this.props.links} pageHandler={this.props.pageHandler}/>
       {this.props.children}
     </div>;
   }

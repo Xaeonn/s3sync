@@ -24,7 +24,7 @@ S3Client.prototype.getBucketList = function () {
   });
 };
 
-S3Client.prototype.getObjectList = function (bucket) {
+S3Client.prototype.getObjectList = function (bucket, callback) {
   var params = {
     Bucket: bucket, /* required */
     // Delimiter: 'STRING_VALUE',
@@ -33,13 +33,17 @@ S3Client.prototype.getObjectList = function (bucket) {
     // MaxKeys: 0,
     // Prefix: 'STRING_VALUE'
   };
+
   this.s3.listObjectsV2(params, function(err, data) {
+    items = [];
     if (err) {console.log(err, err.stack);}
     else{
+        console.log(data.Contents[0]);
         for(k in data.Contents){
-          console.log(data.Contents[k].Key);
+          items.push({name:data.Contents[k].Key});
         }
     }
+    callback(items);
   });
 };
 

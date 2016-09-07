@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 // Components
 Page = require('./Page');
 BucketList = require('./BucketList');
+FolderView = require('./FolderView');
 
 // Constants
 const links = [{pageId:"buckets",text:"Buckets"},
@@ -22,8 +23,8 @@ PageManager = function(){
 
 PageManager.prototype.render = function () {
   ReactDOM.render(
-    <Page links={this.NavLinks} loadPage={this.loadPage}>
-      <BucketList buckets={s3Client.buckets} loadPage={this.loadPage}/>
+    <Page links={this.NavLinks} pageHandler={this}>
+      <BucketList buckets={s3Client.buckets} pageHandler={this}/>
     </Page>,
     document.getElementById('container')
   );
@@ -50,11 +51,24 @@ PageManager.prototype.loadPage = function (pageId, data) {
       console.log("galeries");
       break;
     case "bucket":
-      console.log("Loading bucket ", data);
+      this.loadBucket(data);
       break;
     default:
       console.log("Sorry, we are out of " + pageId + ".");
   }
 }
+
+PageManager.prototype.loadBucket = function (data) {
+  folder = data;
+  pm = this;
+  s3Client.getObjectList(data, function(items){
+    ReactDOM.render(
+      <Page links={pm.NavLinks} loadPage={pm.loadPage}>
+        <FolderView folderItems={items} folderName={folder} pageHandler={pm}/>
+      </Page>,
+      document.getElementById('container')
+    );
+  });
+};
 
 module.exports = PageManager;

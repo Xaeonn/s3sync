@@ -9,7 +9,7 @@ var Page = React.createClass({
     return React.createElement(
       'div',
       null,
-      React.createElement(NavBar, { links: this.props.links, loadPage: this.props.loadPage }),
+      React.createElement(NavBar, { links: this.props.links, pageHandler: this.props.pageHandler }),
       this.props.children
     );
   }

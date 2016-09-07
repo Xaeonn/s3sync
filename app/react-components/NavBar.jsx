@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 
 window.NavBar = React.createClass({
   populateNav: function(link){
-    return <li key={link.pageId} onClick={()=>this.props.loadPage(link.pageId)}><a href="#">{link.text}</a></li>;
+    return <li key={link.pageId} onClick={()=>this.props.pageHandler.loadPage(link.pageId)}><a href="#">{link.text}</a></li>;
   },
   render: function() {
     return <nav className="navbar navbar-static-top navbar-inverse" id="titleBar">

@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 FolderView = React.createClass({
   populateList: function(item){
     return <li key={item.name} className="list-group-item">
-        <a href="#" onClick={()=>this.props.pageHandler.loadPage('bucket',item.name)}>
+        <a href="#" onClick={()=>this.props.pageManager.openFile(this.props.bucket,item.name)}>
           {item.name}
         </a>
       </li>;

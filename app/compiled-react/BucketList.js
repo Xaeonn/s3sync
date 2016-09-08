@@ -10,7 +10,7 @@ BucketList = React.createClass({
       { key: bucket, className: 'list-group-item' },
       React.createElement(
         'a',
-        { href: '#', onClick: () => this.props.pageHandler.loadPage('bucket', bucket) },
+        { href: '#', onClick: () => this.props.pageManager.loadPage('bucket', { bucket: bucket, folderPrefix: '' }) },
         bucket
       )
     );

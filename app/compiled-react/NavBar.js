@@ -7,7 +7,7 @@ window.NavBar = React.createClass({
   populateNav: function (link) {
     return React.createElement(
       'li',
-      { key: link.pageId, onClick: () => this.props.pageHandler.loadPage(link.pageId) },
+      { key: link.pageId, onClick: () => this.props.pageManager.loadPage(link.pageId) },
       React.createElement(
         'a',
         { href: '#' },

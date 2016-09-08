@@ -23,8 +23,7 @@ PageManager = function(){
 
 PageManager.prototype.render = function () {
   ReactDOM.render(
-    <Page links={this.NavLinks} pageHandler={this}>
-      <BucketList buckets={s3Client.buckets} pageHandler={this}/>
+    <Page links={this.NavLinks} pageManager={this}>
     </Page>,
     document.getElementById('container')
   );
@@ -33,7 +32,7 @@ PageManager.prototype.render = function () {
 PageManager.prototype.loadPage = function (pageId, data) {
   switch (pageId) {
     case "buckets":
-      console.log("buckets");
+      this.listBuckets();
       break;
     case "sync_folders":
       console.log("sync_folders");
@@ -51,24 +50,41 @@ PageManager.prototype.loadPage = function (pageId, data) {
       console.log("galeries");
       break;
     case "bucket":
-      this.loadBucket(data);
+      this.listBucketFiles(data);
       break;
     default:
-      console.log("Sorry, we are out of " + pageId + ".");
+      this.render();
   }
 }
 
-PageManager.prototype.loadBucket = function (data) {
-  folder = data;
-  pm = this;
-  s3Client.getObjectList(data, function(items){
+// List the available buckets on the account
+PageManager.prototype.listBuckets = function () {
+  var pm = this;
+  s3Client.getBucketList(function(buckets){
     ReactDOM.render(
-      <Page links={pm.NavLinks} loadPage={pm.loadPage}>
-        <FolderView folderItems={items} folderName={folder} pageHandler={pm}/>
+      <Page links={pm.NavLinks} pageManager={pm}>
+        <BucketList buckets={buckets} pageManager={pm}/>
       </Page>,
       document.getElementById('container')
     );
   });
 };
 
+// List the contents of a bucket
+PageManager.prototype.listBucketFiles = function (data) {
+  pm = this;
+  s3Client.getObjectList(data.bucket, data.folderPrefix, function(items){
+    ReactDOM.render(
+      <Page links={pm.NavLinks} pageManager={pm}>
+        <FolderView folderItems={items} bucket={data.bucket} folderName={data.folderPrefix} pageManager={pm}/>
+      </Page>,
+      document.getElementById('container')
+    );
+  });
+};
+
+PageManager.prototype.openFile = function (bucket, item) {
+  console.log(bucket,' ', item);
+
+};
 module.exports = PageManager;

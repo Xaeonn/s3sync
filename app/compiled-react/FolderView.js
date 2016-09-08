@@ -10,7 +10,7 @@ FolderView = React.createClass({
       { key: item.name, className: 'list-group-item' },
       React.createElement(
         'a',
-        { href: '#', onClick: () => this.props.pageHandler.loadPage('bucket', item.name) },
+        { href: '#', onClick: () => this.props.pageManager.openFile(this.props.bucket, item.name) },
         item.name
       )
     );

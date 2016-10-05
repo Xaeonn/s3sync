@@ -4,35 +4,16 @@ var ReactDOM = require('react-dom');
 FolderView = React.createClass({
   populateList: function(item){
     return <li key={item.name} className="list-group-item">
-        <a href="#" onClick={()=>this.props.pageManager.openFile(this.props.bucket,item.name)}>
+        <a href="#" onClick={()=>this.props.pageManager.openFile(this.props.bucket,this.props.path,item.name)}>
           {item.name}
         </a>
       </li>;
   },
   render: function() {
-    return <div className="container-fluid"><h2>{this.props.folderName}</h2><ul className="list-group">
+    return <div className="container-fluid"><h2>{this.props.path}</h2><ul className="list-group">
       {this.props.folderItems.map(this.populateList)}
     </ul></div>;
   }
 });
 
 module.exports = FolderView;
-
-// Taken from example at
-// http://stackoverflow.com/questions/29902347/open-a-file-with-default-program-in-node-webkit
-
-// function getCommandLine() {
-//    switch (process.platform) {
-//       case 'darwin' : return 'open';
-//       case 'win32' : return 'start';
-//       case 'win64' : return 'start';
-//       default : return 'xdg-open';
-//    }
-// }
-
-// second , execute the command line followed by the path
-
-// var sys = require('sys');
-// var exec = require('child_process').exec;
-//
-// exec(getCommandLine() + ' ' + filePath);

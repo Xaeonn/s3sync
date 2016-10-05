@@ -6,7 +6,7 @@ BucketList = require('./BucketList');
 FolderView = require('./FolderView');
 
 // Constants
-const links = [{ pageId: "buckets", text: "Buckets" }, { pageId: "sync_folders", text: "Syncing Folders" }, { pageId: "static_sites", text: "Static Websites" }, { pageId: "domains", text: "Domains" }, { pageId: "blogs", text: "Blogs" }, { pageId: "galeries", text: "Galeries" }];
+const links = [{ pageId: "buckets", text: "Buckets" }, { pageId: "files", text: "Local Files" }, { pageId: "sync_folders", text: "Syncing Folders" }, { pageId: "static_sites", text: "Static Websites" }, { pageId: "domains", text: "Domains" }, { pageId: "blogs", text: "Blogs" }, { pageId: "galeries", text: "Galeries" }];
 
 PageManager = function () {
   // this.Components = ComponentTypes;
@@ -43,9 +43,32 @@ PageManager.prototype.loadPage = function (pageId, data) {
     case "bucket":
       this.listBucketFiles(data);
       break;
+    case "files":
+      if (typeof data == 'undefined') {
+        this.listFiles({ path: "." });
+      } else {
+        this.listFiles({ path: data.path });
+      }
+      break;
     default:
       this.render();
   }
+};
+
+// List the contents of a bucket
+PageManager.prototype.listFiles = function (data) {
+  pm = this;
+  fs.readdir(data.path, function (err, files) {
+    var items = [];
+    for (var k in files) {
+      items.push({ name: files[k] });
+    }
+    ReactDOM.render(React.createElement(
+      Page,
+      { links: pm.NavLinks, pageManager: pm },
+      React.createElement(FolderView, { folderItems: items, bucket: "Local files", path: data.path, pageManager: pm })
+    ), document.getElementById('container'));
+  });
 };
 
 // List the available buckets on the account
@@ -67,12 +90,49 @@ PageManager.prototype.listBucketFiles = function (data) {
     ReactDOM.render(React.createElement(
       Page,
       { links: pm.NavLinks, pageManager: pm },
-      React.createElement(FolderView, { folderItems: items, bucket: data.bucket, folderName: data.folderPrefix, pageManager: pm })
+      React.createElement(FolderView, { folderItems: items, bucket: data.bucket, path: data.folderPrefix, pageManager: pm })
     ), document.getElementById('container'));
   });
 };
 
-PageManager.prototype.openFile = function (bucket, item) {
-  console.log(bucket, ' ', item);
+PageManager.prototype.openFile = function (bucket, path, item) {
+  var pm = this;
+  fullpath = path + '/' + item;
+  console.log(path);
+  if (bucket == "Local files") {
+    fs.stat(fullpath, function (err, stats) {
+      if (stats.isFile()) {
+        pm.openExtFile(fullpath);
+      }
+      if (stats.isDirectory()) {
+        pm.loadPage("files", { path: fullpath });
+      }
+    });
+  }
 };
+
+PageManager.prototype.openExtFile = function (fullpath) {
+  // Taken from example at
+  // http://stackoverflow.com/questions/29902347/open-a-file-with-default-program-in-node-webkit
+  var starter;
+  switch (process.platform) {
+    case 'darwin':
+      starter = 'open';
+    case 'win32':
+      starter = 'start';
+    case 'win64':
+      starter = 'start';
+    default:
+      starter = 'xdg-open';
+  }
+
+  // second , execute the command line followed by the path
+
+  // var sys = require('sys');
+  var exec = require('child_process').exec;
+
+  exec(starter + ' ' + fullpath);
+  console.log("something");
+};
+
 module.exports = PageManager;

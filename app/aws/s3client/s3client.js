@@ -120,12 +120,21 @@ S3Client.prototype.UploadPublicFile = function(bucket, file, key) {
 // Takes the bucket name, key of the file and a callback function that will be
 // passed the file data to handle
 S3Client.prototype.DownloadFile = function(bucket, key, callback) {
+  // Set the paramaters
+  var params = {
+    Bucket: bucket,
+    Key: key,
+    // IfModifiedSince: new Date()
+  };
 
+  // Request the object
+  s3.getObject(params, function(err, data) {
+    if (err) {
+      console.debug(err, err.stack);
+    } else {
+      callback(data);
+    }
+  });
 };
-
-S3Client.prototype.GetFileStats = function(bucket, key, callback) {
-
-};
-
 
 module.exports = S3Client;

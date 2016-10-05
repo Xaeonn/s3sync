@@ -10,7 +10,7 @@ var AWS = require('aws-sdk');
 
 var S3Client = function(region) {
   AWS.config.region = region;
-  s3 = new AWS.S3();
+  this.s3 = new AWS.S3();
   // TODO: Move the following to a config file so they can be configured without
   // needing to dig into the code
   this.delimiter = '/';
@@ -99,7 +99,7 @@ S3Client.prototype.UploadFile = function(bucket, file, key, acl='private') {
   };
 
   // Send the upload request
-  var UploadManager = s3.upload(params, function(err, data) {
+  var UploadManager = this.s3.upload(params, function(err, data) {
     // TODO: Decide if I should take a callback paramater in the UploadFile
     // function and use it here to let the caller know it's completed or rely on
     // polling the UploadManager.
@@ -128,7 +128,7 @@ S3Client.prototype.DownloadFile = function(bucket, key, callback) {
   };
 
   // Request the object
-  s3.getObject(params, function(err, data) {
+  this.s3.getObject(params, function(err, data) {
     if (err) {
       console.debug(err, err.stack);
     } else {

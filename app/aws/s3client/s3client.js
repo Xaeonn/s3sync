@@ -23,7 +23,7 @@ var S3Client = function(region) {
 S3Client.prototype.ListBuckets = function (callback) {
   this.s3.listBuckets(function(err, data) {
     if (err) {
-      console.debug("Error:", err);
+      console.debug('Error:', err);
       // TODO: Decide what to return to handle the failure
     }
     else {
@@ -47,9 +47,9 @@ S3Client.prototype.listFiles = function(bucket, prefix, marker, callback) {
     MaxKeys: this.MaxKeys,
     Prefix: prefix
   };
+
   // Make the actual request
   this.s3.listObjectsV2(params, function(err, data) {
-    items = [];
     if (err) {
       console.debug(err, err.stack);
     }
@@ -81,15 +81,39 @@ S3Client.prototype.ListDirectoryFiles = function (bucket, prefix, callback) {
 // Lists a next page of files if the number was greater than the max keys
 // Takes the bucket to list the files from, the prefix, the continuation marker
 // returned by the previous request, and a callback
-S3Client.prototype.ListDirectoryFilesNext = function (bucket, prefix, marker, callback) {
+S3Client.prototype.ListDirectoryFilesNext = function (bucket, prefix, marker,
+                                                      callback) {
   this.listFiles(bucket, prefix, marker, callback);
 };
 
 // Uploads a file to a bucket
 // Takes the bucket name, a file descriptor to upload, and the key to give it in
 // the bucket
-S3Client.prototype.UploadFile = function(bucket, file, key) {
+S3Client.prototype.UploadFile = function(bucket, file, key, acl='private') {
+  // Define
+  var params = {
+    Bucket: bucket,
+    Key: key,
+    ACL: acl,
+    Body: file
+  };
 
+  // Send the upload request
+  var UploadManager = s3.upload(params, function(err, data) {
+    // TODO: Decide if I should take a callback paramater in the UploadFile
+    // function and use it here to let the caller know it's completed or rely on
+    // polling the UploadManager.
+    // Considering adding an active upload object to the S3Client to track all
+    // ongoing uploads
+    console.log(err, data);
+  });
+};
+
+// Uploads a file to a bucket and makes it public
+// Takes the bucket name, a file descriptor to upload, and the key to give it in
+// the bucket
+S3Client.prototype.UploadPublicFile = function(bucket, file, key) {
+  this.UploadFile(bucket, file, key, acl='public-read');
 };
 
 // Download the file corrasponding to a key from a bucket
@@ -99,17 +123,9 @@ S3Client.prototype.DownloadFile = function(bucket, key, callback) {
 
 };
 
-//
-S3Client.prototype.UploadBatch = function(bucket, files, keys) {
-
-};
-
 S3Client.prototype.GetFileStats = function(bucket, key, callback) {
 
 };
 
-S3Client.prototype.UploadPublicFile = function(bucket, file, key) {
-
-};
 
 module.exports = S3Client;

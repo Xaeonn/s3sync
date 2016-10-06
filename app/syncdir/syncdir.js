@@ -14,17 +14,21 @@ var SyncDir = function (path, s3Client, bucket, prefix) {
 };
 
 SyncDir.prototype.init = function () {
-
+  // TODO: Setup an fs.Watch on the directory and figure out the best way to run
+  // the program in the backgroud when not opened in electron directly
 };
 
 SyncDir.prototype.sync = function () {
   this.uploadFiles();
 };
 
+//
 SyncDir.prototype.status = function () {
 
 };
 
+// Go through files from the root sync directory and recursively call to sync
+// subdirectories
 SyncDir.prototype.uploadFiles = function(location='') {
   files = fs.readdirSync(this.path + location);
   console.debug(files);
@@ -43,6 +47,7 @@ SyncDir.prototype.uploadFiles = function(location='') {
   }
 };
 
+// Read a file into a buffer then pass it to the S3Client to be uploaded
 SyncDir.prototype.uploadFile = function(filepath, key) {
   file = fs.readFileSync(filepath);
   this.s3Client.UploadFile(this.bucket, file, this.s3Prefix + key);

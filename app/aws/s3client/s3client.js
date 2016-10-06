@@ -43,10 +43,12 @@ S3Client.prototype.listFiles = function(bucket, prefix, marker, callback) {
   var params = {
     Bucket: bucket,
     Delimiter: this.delimiter,
-    Marker: marker,
+    ContinuationToken: marker,
     MaxKeys: this.MaxKeys,
     Prefix: prefix
   };
+
+  console.debug(params);
 
   // Make the actual request
   this.s3.listObjectsV2(params, function(err, data) {

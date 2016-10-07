@@ -88,22 +88,25 @@ S3Client.prototype.ListDirectoryFilesNext = function (bucket, prefix, marker,
   this.listFiles(bucket, prefix, marker, callback);
 };
 
-S3Client.prototype.IsUpToDate = function(bucket, key, lastModified) {
+// Checks if a file in S3 is up to date
+// Takes the bucket, the key of the file, the last modifed date of the file on
+// the computer and a callback function that will be passed the file data to
+// handle
+S3Client.prototype.IsUpToDate = function(bucket, key, lastModified, callback) {
   // Define paramaters
   var params = {
     Bucket: bucket,
     Key: key
   };
 
-  var upToDate;
   this.s3.headObject(params, function(err, data) {
     if(err) {
       upToDate = false;
-      return;
+    } else{
+      upToDate = Date.parse(data.LastModified) >= lastModified;
     }
-    upToDate = data.LastModified >= lastModified;
+    callback(upToDate);
   });
-  return upToDate;
 };
 
 // Uploads a file to a bucket

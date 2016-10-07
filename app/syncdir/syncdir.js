@@ -54,10 +54,15 @@ SyncDir.prototype.uploadFiles = function(location='') {
 
 // Read a file into a buffer then pass it to the S3Client to be uploaded
 SyncDir.prototype.uploadFile = function(filepath, key, lastModified) {
-  if ( !this.s3Client.IsUpToDate(lastModified) ) {
-    file = fs.readFileSync(filepath);
-    this.s3Client.UploadFile(this.bucket, file, this.s3Prefix + key);
-  }
+  var sd = this;
+  this.s3Client.IsUpToDate(this.bucket, this.s3Prefix + key,
+                            lastModified, function(upToDate){
+                              console.log(upToDate);
+    if (!upToDate) {
+      file = fs.readFileSync(filepath);
+      sd.s3Client.UploadFile(sd.bucket, file, sd.s3Prefix + key);
+    }
+  });
 };
 
 module.exports = SyncDir;

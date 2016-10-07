@@ -1,16 +1,30 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+
 // Components
 Page = require('./Page');
 BucketList = require('./BucketList');
 FolderView = require('./FolderView');
 NewSync = require('./NewSync');
+SyncList = require('./SyncList');
+
+
+// File system
+fs = require('fs');
+
+// S3 client
+var S3Client = require('../aws/s3client/s3client');
+s3Client = new S3Client('eu-west-1');
+
+// SyncDirManager
+var SyncDirManager = require('../syncdir/syncdir_manager');
 
 // Constants
 const links = [
   {pageId:"buckets",text:"Browse S3"},
   {pageId:"files",text:"Browse Files"},
-  {pageId:"sync_folders",text:"Syncing Folders"},
+  {pageId:"new_sync",text:"New Sync"},
+  {pageId:"sync_list",text:"Sync List"},
   // {pageId:"static_sites",text:"Static Websites"},
   // {pageId:"domains",text:"Domains"},
   // {pageId:"blogs",text:"Blogs"},
@@ -23,11 +37,13 @@ PageManager = function(){
   this.NavLinks = links;
   // this.GlobalModals = {};
   // this.SearchResultItems  = [];
+  this.syncDirManager = new SyncDirManager(s3Client);
 }
 
 PageManager.prototype.render = function () {
   ReactDOM.render(
     <Page links={this.NavLinks} pageManager={this}>
+      <SyncList syncs={this.syncDirManager.syncs} />
     </Page>,
     document.getElementById('container')
   );
@@ -38,9 +54,11 @@ PageManager.prototype.loadPage = function (pageId, data) {
     case "buckets":
       this.listBuckets();
       break;
-    case "sync_folders":
-      this.loadSyncView();
-      console.log("sync_folders");
+    case "new_sync":
+      this.loadNewSyncView();
+      break;
+    case "sync_list":
+      this.loadSyncList();
       break;
     case "static_sites":
       console.log("static_sites");
@@ -69,15 +87,21 @@ PageManager.prototype.loadPage = function (pageId, data) {
   }
 }
 
-function test(directory, bucket, prefix) {
-  alert(directory + ' ' + bucket + ' ' + prefix);
-  page.loadPage('files');
-}
-//
-PageManager.prototype.loadSyncView = function () {
+// Loads the sync list page
+PageManager.prototype.loadSyncList = function () {
   ReactDOM.render(
     <Page links={this.NavLinks} pageManager={this}>
-      <NewSync createSync={test}/>
+      <SyncList syncs={this.syncDirManager.syncs}/>
+    </Page>,
+    document.getElementById('container')
+  );
+};
+
+// Loads the new sync page
+PageManager.prototype.loadNewSyncView = function () {
+  ReactDOM.render(
+    <Page links={this.NavLinks} pageManager={this}>
+      <NewSync syncDirManager={this.syncDirManager}/>
     </Page>,
     document.getElementById('container')
   );

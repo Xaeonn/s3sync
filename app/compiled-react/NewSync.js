@@ -8,7 +8,7 @@ NewSync = React.createClass({
     var directory = $('#directory').val();
     var bucket = $('#bucket').val();
     var prefix = $('#prefix').val();
-    this.props.createSync(directory, bucket, prefix);
+    this.props.syncDirManager.createSync(directory, bucket, prefix);
   },
   render: function () {
     return React.createElement(
@@ -16,7 +16,7 @@ NewSync = React.createClass({
       { className: 'container-fluid' },
       React.createElement(
         'form',
-        { action: '#' },
+        null,
         React.createElement(
           'div',
           { className: 'form-group' },
@@ -25,7 +25,7 @@ NewSync = React.createClass({
             { htmlFor: 'directory' },
             'Sync Directory'
           ),
-          React.createElement('input', { type: 'text', className: 'form-control', id: 'directory', name: 'directory', placeholder: 'Sync Directory' })
+          React.createElement('input', { type: 'text', className: 'form-control', id: 'directory', placeholder: 'Sync Directory' })
         ),
         React.createElement(
           'div',
@@ -35,7 +35,7 @@ NewSync = React.createClass({
             { htmlFor: 'bucket' },
             'Bucket Name'
           ),
-          React.createElement('input', { type: 'text', className: 'form-control', id: 'bucket', name: 'bucket', placeholder: 'Bucket Name' })
+          React.createElement('input', { type: 'text', className: 'form-control', id: 'bucket', placeholder: 'Bucket Name' })
         ),
         React.createElement(
           'div',
@@ -45,7 +45,7 @@ NewSync = React.createClass({
             { htmlFor: 'prefix' },
             'Prefix Text'
           ),
-          React.createElement('input', { type: 'text', className: 'form-control', id: 'prefix', name: 'prefix', placeholder: 'Prefix text' })
+          React.createElement('input', { type: 'text', className: 'form-control', id: 'prefix', placeholder: 'Prefix text' })
         )
       ),
       React.createElement(

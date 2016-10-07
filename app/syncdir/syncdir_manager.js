@@ -9,15 +9,19 @@ var fs = require('fs');
 
 var SyncDirManager = function(s3Client) {
   this.s3Client = s3Client;
-  this.dateFile = './data.json';
+  this.dataFile = './data/syncs.json';
+  this.configFile = './data/sync_config.json';
   // Try to read in existing syncs from file
   try {
     this.syncs = JSON.parse(fs.readFileSync(this.dataFile));
+    this.config = JSON.parse(fs.readFileSync(this.configFile));
   } catch(err) {
     // if the read failed start without any syncs setup
     this.syncs = [];
+    this.config = {IDCounter:1};
   }
   this.SyncDirs = [];
+
   // Setup the SyncDir objects for each sync read in
   for (var k in this.syncs) {
     var sync = this.syncs[k];
@@ -33,17 +37,20 @@ SyncDirManager.prototype.createSync = function(directory, bucket, prefix) {
 
   // Add to the syncs object and write to disk for persistance
   var syncDetails = {
+    id:this.config.IDCounter,
     type:'simple',
     directory:directory,
     bucket:bucket,
     prefix:prefix
   };
+  this.config.IDCounter++;
   this.syncs.push(syncDetails);
   this.updateStore();
 };
 
 SyncDirManager.prototype.updateStore = function() {
   fs.writeFileSync(this.dataFile, JSON.stringify(this.syncs));
+  fs.writeFileSync(this.configFile, JSON.stringify(this.config));
 };
 
 module.exports = SyncDirManager;

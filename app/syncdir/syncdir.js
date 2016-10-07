@@ -9,7 +9,11 @@ var fs = require('fs');
 var SyncDir = function (path, s3Client, bucket, prefix) {
   this.path = path;
   this.bucket = bucket;
-  this.s3Prefix = prefix;
+  if (prefix.endsWith('/')){
+    this.s3Prefix = prefix;
+  } else {
+    this.s3Prefix = prefix + '/';
+  }
   this.s3Client = s3Client;
 };
 

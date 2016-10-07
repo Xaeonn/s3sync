@@ -6,7 +6,7 @@ NewSync = React.createClass({
     var directory = $('#directory').val();
     var bucket = $('#bucket').val();
     var prefix = $('#prefix').val();
-    this.props.createSync(directory, bucket, prefix);
+    this.props.syncDirManager.createSync(directory, bucket, prefix);
   },
   render: function() {
     return <div className="container-fluid">

@@ -6,7 +6,7 @@
 
 var fs = require('fs');
 
-var SyncDir = function (path, s3Client, bucket, prefix) {
+var SyncDir = function (path, s3Client, bucket, prefix, id) {
   this.path = path;
   this.bucket = bucket;
   if (prefix.endsWith('/')){
@@ -15,6 +15,7 @@ var SyncDir = function (path, s3Client, bucket, prefix) {
     this.s3Prefix = prefix + '/';
   }
   this.s3Client = s3Client;
+  this.ID = id;
 };
 
 SyncDir.prototype.init = function () {

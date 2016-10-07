@@ -25,14 +25,19 @@ var SyncDirManager = function(s3Client) {
   // Setup the SyncDir objects for each sync read in
   for (var k in this.syncs) {
     var sync = this.syncs[k];
-    var sd = new SyncDir(sync.directory, s3Client, sync.bucket, sync.prefix);
+    var sd = new SyncDir(sync.directory, this.s3Client, sync.bucket,
+                        sync.prefix, sync.id);
     this.SyncDirs.push(sd);
   }
 };
 
 SyncDirManager.prototype.createSync = function(directory, bucket, prefix) {
   // setup the the SyncDir object and add it to the list of SyncDirs
-  var sd = new SyncDir(directory, this.s3Client, bucket, prefix);
+  var sd = new SyncDir(directory,
+                      this.s3Client,
+                      bucket,
+                      prefix,
+                      this.config.IDCounter);
   this.SyncDirs.push(sd);
 
   // Add to the syncs object and write to disk for persistance
@@ -46,11 +51,18 @@ SyncDirManager.prototype.createSync = function(directory, bucket, prefix) {
   this.config.IDCounter++;
   this.syncs.push(syncDetails);
   this.updateStore();
+  sd.sync();
 };
 
 SyncDirManager.prototype.updateStore = function() {
   fs.writeFileSync(this.dataFile, JSON.stringify(this.syncs));
   fs.writeFileSync(this.configFile, JSON.stringify(this.config));
+};
+
+SyncDirManager.prototype.runSync = function(id) {
+  console.debug(id);
+  sd = this.SyncDirs.find(x => x.ID === id);
+  sd.sync();
 };
 
 module.exports = SyncDirManager;

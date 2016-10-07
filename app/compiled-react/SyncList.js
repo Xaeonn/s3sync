@@ -27,7 +27,7 @@ var SyncList = React.createClass({
         'td',
         null,
         React.createElement('span', { className: 'glyphicon glyphicon-refresh', 'aria-hidden': 'true',
-          onClick: () => this.sync() })
+          onClick: () => this.props.syncDirManager.runSync(sync.id) })
       )
     );
   },

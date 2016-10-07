@@ -34,7 +34,8 @@ PageManager.prototype.render = function () {
   ReactDOM.render(React.createElement(
     Page,
     { links: this.NavLinks, pageManager: this },
-    React.createElement(SyncList, { syncs: this.syncDirManager.syncs })
+    React.createElement(SyncList, { syncs: this.syncDirManager.syncs,
+      syncDirManager: this.syncDirManager })
   ), document.getElementById('container'));
 };
 
@@ -81,7 +82,8 @@ PageManager.prototype.loadSyncList = function () {
   ReactDOM.render(React.createElement(
     Page,
     { links: this.NavLinks, pageManager: this },
-    React.createElement(SyncList, { syncs: this.syncDirManager.syncs })
+    React.createElement(SyncList, { syncs: this.syncDirManager.syncs,
+      syncDirManager: this.syncDirManager })
   ), document.getElementById('container'));
 };
 
@@ -105,7 +107,8 @@ PageManager.prototype.listFiles = function (data) {
     ReactDOM.render(React.createElement(
       Page,
       { links: pm.NavLinks, pageManager: pm },
-      React.createElement(FolderView, { folderItems: items, bucket: "Local files", path: data.path, pageManager: pm })
+      React.createElement(FolderView, { folderItems: items, bucket: "Local files", path: data.path,
+        pageManager: pm })
     ), document.getElementById('container'));
   });
 };

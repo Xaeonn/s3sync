@@ -9,7 +9,7 @@ var SyncList = React.createClass({
         <td>{sync.prefix}</td>
         <td>
           <span className="glyphicon glyphicon-refresh" aria-hidden="true"
-            onClick={()=>this.sync()}>
+            onClick={()=>this.props.syncDirManager.runSync(sync.id)}>
           </span>
         </td>
       </tr>;

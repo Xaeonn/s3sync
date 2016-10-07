@@ -43,7 +43,8 @@ PageManager = function(){
 PageManager.prototype.render = function () {
   ReactDOM.render(
     <Page links={this.NavLinks} pageManager={this}>
-      <SyncList syncs={this.syncDirManager.syncs} />
+      <SyncList syncs={this.syncDirManager.syncs}
+                syncDirManager={this.syncDirManager}/>
     </Page>,
     document.getElementById('container')
   );
@@ -91,7 +92,8 @@ PageManager.prototype.loadPage = function (pageId, data) {
 PageManager.prototype.loadSyncList = function () {
   ReactDOM.render(
     <Page links={this.NavLinks} pageManager={this}>
-      <SyncList syncs={this.syncDirManager.syncs}/>
+      <SyncList syncs={this.syncDirManager.syncs}
+                syncDirManager={this.syncDirManager}/>
     </Page>,
     document.getElementById('container')
   );
@@ -117,7 +119,8 @@ PageManager.prototype.listFiles = function (data) {
     }
     ReactDOM.render(
       <Page links={pm.NavLinks} pageManager={pm}>
-        <FolderView folderItems={items} bucket={"Local files"} path={data.path} pageManager={pm}/>
+        <FolderView folderItems={items} bucket={"Local files"} path={data.path}
+                    pageManager={pm}/>
       </Page>,
       document.getElementById('container')
     );

@@ -47,15 +47,17 @@ SyncDir.prototype.uploadFiles = function(location='') {
     if (stats.isDirectory()){
       this.uploadFiles(key);
     } else {
-      this.uploadFile(fullpath, key);
+      this.uploadFile(fullpath, key, stats.mtime);
     }
   }
 };
 
 // Read a file into a buffer then pass it to the S3Client to be uploaded
-SyncDir.prototype.uploadFile = function(filepath, key) {
-  file = fs.readFileSync(filepath);
-  this.s3Client.UploadFile(this.bucket, file, this.s3Prefix + key);
+SyncDir.prototype.uploadFile = function(filepath, key, lastModified) {
+  if ( !this.s3Client.IsUpToDate(lastModified) ) {
+    file = fs.readFileSync(filepath);
+    this.s3Client.UploadFile(this.bucket, file, this.s3Prefix + key);
+  }
 };
 
 module.exports = SyncDir;

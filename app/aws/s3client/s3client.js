@@ -88,11 +88,29 @@ S3Client.prototype.ListDirectoryFilesNext = function (bucket, prefix, marker,
   this.listFiles(bucket, prefix, marker, callback);
 };
 
+S3Client.prototype.IsUpToDate = function(bucket, key, lastModified) {
+  // Define paramaters
+  var params = {
+    Bucket: bucket,
+    Key: key
+  };
+
+  var upToDate;
+  this.s3.headObject(params, function(err, data) {
+    if(err) {
+      upToDate = false;
+      return;
+    }
+    upToDate = data.LastModified >= lastModified;
+  });
+  return upToDate;
+};
+
 // Uploads a file to a bucket
 // Takes the bucket name, a file descriptor to upload, and the key to give it in
 // the bucket
 S3Client.prototype.UploadFile = function(bucket, file, key, acl='private') {
-  // Define
+  // Define paramaters
   var params = {
     Bucket: bucket,
     Key: key,

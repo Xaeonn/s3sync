@@ -15,5 +15,7 @@ require('../vendor/bootstrap/js/bootstrap');
 require('./scripts/window_controls');
 
 SyncDir = require('./syncdir/syncdir');
-syncDir = new SyncDir('/Users/samboles/syncfile',
-                      s3Client, 'general-crap', 'tets');
+// syncDir = new SyncDir('/Users/samboles/syncfile',
+//                       s3Client, 'general-crap', 'tets');
+
+require('./scripts/syncdir_preventdefault');

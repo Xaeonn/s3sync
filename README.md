@@ -17,3 +17,7 @@ AWS Credentials are required for s3sync to run, specify them using:
 export AWS_ACCESS_KEY_ID='AKID'
 export AWS_SECRET_ACCESS_KEY='SECRET'
 ```
+
+Callbacks are being used to handle web requests at the moment which is leading
+to potential problems of execution order of user clicks, some simple
+implementation of flux would solve this.

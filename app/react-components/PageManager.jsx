@@ -8,8 +8,8 @@ NewSync = require('./NewSync');
 
 // Constants
 const links = [
-  {pageId:"buckets",text:"Buckets"},
-  {pageId:"files",text:"Local Files"},
+  {pageId:"buckets",text:"Browse S3"},
+  {pageId:"files",text:"Browse Files"},
   {pageId:"sync_folders",text:"Syncing Folders"},
   // {pageId:"static_sites",text:"Static Websites"},
   // {pageId:"domains",text:"Domains"},
@@ -69,11 +69,15 @@ PageManager.prototype.loadPage = function (pageId, data) {
   }
 }
 
+function test(directory, bucket, prefix) {
+  alert(directory + ' ' + bucket + ' ' + prefix);
+  page.loadPage('files');
+}
 //
 PageManager.prototype.loadSyncView = function () {
   ReactDOM.render(
     <Page links={this.NavLinks} pageManager={this}>
-      <NewSync />
+      <NewSync createSync={test}/>
     </Page>,
     document.getElementById('container')
   );
@@ -140,9 +144,6 @@ PageManager.prototype.openFile = function (bucket, path, item) {
   console.log(path);
   if (bucket == "Local files") {
     fs.stat(fullpath, function(err, stats){
-      if (stats.isFile()) {
-        pm.openExtFile(fullpath);
-      }
       if (stats.isDirectory()) {
         pm.loadPage("files",{path:fullpath});
       }
@@ -150,24 +151,5 @@ PageManager.prototype.openFile = function (bucket, path, item) {
   }
 };
 
-PageManager.prototype.openExtFile = function(fullpath) {
-  // Taken from example at
-  // http://stackoverflow.com/questions/29902347/open-a-file-with-default-program-in-node-webkit
-  var starter;
-  switch (process.platform) {
-    case 'darwin' : starter = 'open';
-    case 'win32' : starter =  'start';
-    case 'win64' : starter =  'start';
-    default : starter =  'xdg-open';
-  }
-
-  // second , execute the command line followed by the path
-
-  // var sys = require('sys');
-  var exec = require('child_process').exec;
-
-  exec(starter + ' ' + fullpath);
-  console.log("something")
-}
 
 module.exports = PageManager;

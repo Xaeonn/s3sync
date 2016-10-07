@@ -107,7 +107,7 @@ S3Client.prototype.UploadFile = function(bucket, file, key, acl='private') {
     // polling the UploadManager.
     // Considering adding an active upload object to the S3Client to track all
     // ongoing uploads
-    console.log(err, data);
+    console.debug(err, data);
   });
 };
 

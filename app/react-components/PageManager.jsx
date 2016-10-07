@@ -18,6 +18,10 @@ const opn = require('opn');
 var S3Client = require('../aws/s3client/s3client');
 s3Client = new S3Client('eu-west-1');
 
+// S3 client
+var Route53Client = require('../aws/route53client/route53client');
+route53Client = new Route53Client('eu-west-1');
+
 // SyncDirManager
 var SyncDirManager = require('../syncdir/syncdir_manager');
 

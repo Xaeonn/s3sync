@@ -11,6 +11,9 @@ SyncList = require('./SyncList');
 // File system
 fs = require('fs');
 
+// opn
+const opn = require('opn');
+
 // S3 client
 var S3Client = require('../aws/s3client/s3client');
 s3Client = new S3Client('eu-west-1');
@@ -67,7 +70,7 @@ PageManager.prototype.loadPage = function (pageId, data) {
       break;
     case "files":
       if (typeof data == 'undefined') {
-        this.listFiles({ path: "." });
+        this.listFiles({ path: "/" });
       } else {
         this.listFiles({ path: data.path });
       }
@@ -151,14 +154,28 @@ PageManager.prototype.listBucketFiles = function (data) {
 
 PageManager.prototype.openFile = function (bucket, path, item) {
   var pm = this;
-  fullpath = path + '/' + item;
-  console.log(path);
+
   if (bucket == "Local files") {
+    var fullpath;
+    if (path == '/') {
+      fullpath = path + item;
+    } else {
+      fullpath = path + '/' + item;
+    }
+    console.log(path);
+
     fs.stat(fullpath, function (err, stats) {
       if (stats.isDirectory()) {
         pm.loadPage("files", { path: fullpath });
+      } else if (stats.isFile()) {
+        opn(fullpath);
       }
     });
+  } else {
+    // if (fullpath[0] == '/') {
+    //   fullpath = fullpath.slice(1);
+    // }
+    this.loadPage('bucket', { bucket: bucket, folderPrefix: item });
   }
 };
 

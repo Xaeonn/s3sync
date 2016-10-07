@@ -10,9 +10,9 @@ var SyncDir = function (path, s3Client, bucket, prefix, id) {
   this.path = path;
   this.bucket = bucket;
   if (prefix.endsWith('/')){
-    this.s3Prefix = prefix;
+    this.s3Prefix = prefix.slice(0,-1);
   } else {
-    this.s3Prefix = prefix + '/';
+    this.s3Prefix = prefix;
   }
   this.s3Client = s3Client;
   this.ID = id;

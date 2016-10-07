@@ -102,7 +102,7 @@ S3Client.prototype.IsUpToDate = function(bucket, key, lastModified, callback) {
   this.s3.headObject(params, function(err, data) {
     if(err) {
       upToDate = false;
-    } else{
+    } else {
       upToDate = Date.parse(data.LastModified) >= lastModified;
     }
     callback(upToDate);

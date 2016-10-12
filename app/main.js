@@ -6,7 +6,7 @@ let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600, frame:false});
-  mainWindow.loadURL(`file://${__dirname}/app/page.html`);
+  mainWindow.loadURL(`file://${__dirname}/page.html`);
 
   mainWindow.on('closed', function () {
     mainWindow = null;
